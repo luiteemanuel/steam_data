@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "estudos-databricks",
+  "private_key_id": "a40d04e07f4181739a8a09b975087dc9805620c5",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCgWN46mKTmtKek\nMh48EyGXSVs2NTeNRTdJmT9UHykMjPHXrJDssQqHXyP1U57vsQatQT75gLo5pmjL\nOSkVu9hzH7kBK7RcO7hxv+jgOT86OQnU92B2/kEX9RBpjNHfzPc+KzKAvQPdP43x\nzEMRv8ADD9Carm/IMFXz3LjoF5uTeyxWLu770DwXTqthR4oLRTQ2q4h0auXNrN7Z\nFUC9Z/iZvz8cl2tXxJp4m+C3jiVJQGrRGiGl/RKLUmCISlVb33ZB6gkqZhVkvAa7\nCynsEhSiGEU7CT9HwxhOEejo96SZJ3rH12P/xGzp2d9emAwadjMFGE0CQGPCmzmE\n9d9Pf2ZNAgMBAAECggEAGl3SmQ8NmpQdNt4444b/0Iky8ux4SIYXq8YDyFjhXpt0\njxLkt8763LyzxHzuFxrkbqvaZ5uXw7AN7lDlZRoA4xlVyg/+NeZqE2ZLrEctkuzb\nJYZR+e8gFAjrnHeX8TWaeEIRKWMrVf/D3v1IEAyYTciVdEH3xpLQJ2vlieCL6Amn\n1F2RTVJ4IFXuhAJcmhKKsyXUlbzFlxtbnvKs4Aa+Dn6V5FqA7Kzy1h25cnLuErve\nDkOF3iCqjge8tywAOQPslo4FqIIibz+axKwmbrPAFvLFCCmzi20j5+wp+2r0qh31\nI70tATqkCP8htK8hwOjiw07VZRiCClQiFTC72WUdoQKBgQDTpHkMK8nQahVIBD0X\nzAgNIN9+KcEX8iIsPAwnZsB7MSScmbHHKlfPH7092NsDFf0XCTnrNrzH7PoyInFU\nYycUOJyYrG8TZiAUySZMrNi2IltOh7/j+gP8gKrgGnbsUBrPUumsnC2WXb8JJR0a\nk1JjrkI5ruRUyt7Y69EWR/vAsQKBgQDB9C43BzDHF5BWHwe/VbhOWSqnBCkjG1B6\nzgMa3a1X9uhIMdulRBQppIRscTPBs7Ksff6j4kw2XMXLb15SUk9q04qawI5g5m/m\n9pyDw4+hQkAqSWpDy3GcUUpvZ30wsyBVR4ZHkxvBToPXvMSug0/cNcQ05MfSUvbd\nfxOV3npGXQKBgDIPv4o/eVdRIIOObR0J6AWi9vqSydfuMGMiOQXA6lq5fx2DxWeE\n/oxBx7Ovbe7G7rzaM9cNdY4c4fml6AS8B2xjD7eVYhjGmWQRSHvujrxWWB61QZCd\nfP/nN4QW/nZbZFwSEq//qVDeD+gL3VyB6IUnnQaj9eKQsjHBZg3NLSGhAoGAPc+p\n4tOh0fFKiIe/GlUhNabpFu0Whx+vWFPLXYaENeJ0SH3LODIoEtVhdoXlLrgsGxjU\nTDpUe4a5aooFj0q4EJ12MLdpKKyHwR2a58stPQE2HcPj39M4U878X+ClXx3XEhaH\nTswtLj/teJWqQMuMaeugqhK3M+pIznIvNbX/VekCgYEAnOcjUDtiuPaAB24i2llT\nIJSkP5yScl6m1MKSQjCuuSKAOjgcy1Fzg4Sb8BRBFtgWbsqrpvyo9z1BX0G8Iuh3\nZY4fywPDGLmzEFDlaR9n6yU8Pet24X/HTIsDUQsks0QvdDsU2woQ+XXS6TwiPlBJ\nt1ewN/TFXZdB0QnOXO36geQ=\n-----END PRIVATE KEY-----\n",
+  "client_email": "estudos@estudos-databricks.iam.gserviceaccount.com",
+  "client_id": "104607572375516881036",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/estudos%40estudos-databricks.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
