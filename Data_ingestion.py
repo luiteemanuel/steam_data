@@ -4,6 +4,7 @@ from pyspark.sql import functions as F
 from pyspark.sql.types import IntegerType
 from pyspark.sql.functions import when
 from pyspark.sql.functions import col
+from pyspark.sql.functions import desc
 
 spark = SparkSession.builder \
     .appName(" Importação do GCS para Databricks") \
@@ -22,12 +23,25 @@ print("Total de linhas:", total_linhas)
 
 # COMMAND ----------
 
-df = df.withColumn("Peak CCU", F.col("Peak CCU").cast(IntegerType()))
+game_df = (
+    df
+    .withColumn('Multiplatform', when((df['Linux'] == 'True') & 
+    (df['Windows'] == 'True') & 
+    (df['Mac'] == 'True'), 'Sim')
+    .otherwise('Não'))
+)
+game_df.display()
 
 # COMMAND ----------
 
 #Removendo colunas  
-game_df = df.drop('Estimated owners', 'Full audio languages', 'Metacritic url', 'User score', 'Score rank', 'Notes', 'Average playtime forever','Screenshots', 'Movies', 'Tags')
+game_df = (
+    df.drop('Estimated owners', 'Full audio languages', 'Metacritic url', 'User score', 'Score rank', 'Notes', 'Average playtime forever','Screenshots', 'Movies', 'Tags','Support url', 'Header image')
+    .dropDuplicates(['Name'])
+    .dropna(subset=['Name'])   
+
+)
+
 
 # COMMAND ----------
 
@@ -52,6 +66,7 @@ game_df.display()
 
 games_caro = (
     game_df
+    .withColumn("Peak CCU", F.col("Peak CCU").cast(IntegerType()))
     .filter((F.col('Peak CCU') > 1000) & 
             (F.col('Price') >= 50.00))
 )
@@ -82,7 +97,7 @@ Jogos_idade.count()
 
 # COMMAND ----------
 
-# Jogos com Restrição de Idade +18
+# Jogos com Restrição de Idade menor que 18 anos
 Jogos_idade_menor = (
     game_df
     .filter((F.col('Required age') < 18))
@@ -129,27 +144,29 @@ game_reviews.display()
 
 # COMMAND ----------
 
-# Jogos multiplataforma 
-jogos_multi = (
-    game_df
-    .withColumn('Multiplatform', when((game_df['Linux'] == 'True') & 
-    (game_df['Windows'] == 'True') & 
-    (game_df['Mac'] == 'True'), 'Sim')
-    .otherwise('Não'))
-
-)
-jogos_multi.display()
-
-# COMMAND ----------
-
-# jogos com maiores Recomendação 
-
+# jogos com maiores recomendações
 recomenda = (
     game_df
     .withColumn("Recommendations", F.col("Recommendations").cast(IntegerType()))
-    .orderBy(F.desc('Recommendations'))
+    .orderBy(desc('Recommendations'))
+    .select( 'Name', 'Recommendations')
+    .limit(10)
+
 )
 display(recomenda)
+
+# COMMAND ----------
+
+# Filtrando jogos do gênero "RPG" e ordenar por pico de jogadores simultâneos (Peak CCU) em ordem decrescente
+jogos_genero = (
+    game_df
+    .select('Name', 'Peak CCU', 'Price', 'Required age')
+    .filter(col('Genres').contains('RPG'))
+    .orderBy(desc('Peak CCU'))
+)
+# Exibir resultados
+jogos_genero.display()
+
 
 # COMMAND ----------
 
