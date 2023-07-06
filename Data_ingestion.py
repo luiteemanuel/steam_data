@@ -1,10 +1,12 @@
 # Databricks notebook source
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
-from pyspark.sql.types import IntegerType
+from pyspark.sql.types import IntegerType, BooleanType
 from pyspark.sql.functions import when
 from pyspark.sql.functions import col
 from pyspark.sql.functions import desc
+from pyspark.sql.functions import to_date, to_timestamp, date_format
+
 
 spark = SparkSession.builder \
     .appName(" Importação do GCS para Databricks") \
@@ -16,6 +18,7 @@ spark = SparkSession.builder \
 
 # COMMAND ----------
 
+# CONECTANDO AO GOOGLE STORAGE E ARMAZENANDO DADOS EM UM DATAFRAME SPARK! 
 df = spark.read.format("csv").option("header", "true").load("gs://estudy-games/games.csv")
 total_linhas = df.count()
 # Exibir o número total de linhas
@@ -23,25 +26,48 @@ print("Total de linhas:", total_linhas)
 
 # COMMAND ----------
 
-game_df = (
-    df
-    .withColumn('Multiplatform', when((df['Linux'] == 'True') & 
-    (df['Windows'] == 'True') & 
-    (df['Mac'] == 'True'), 'Sim')
-    .otherwise('Não'))
-)
-game_df.display()
+# MAGIC %md
+# MAGIC TRATAMENTO DOS DADOS!!
+# MAGIC
 
 # COMMAND ----------
 
-#Removendo colunas  
 game_df = (
-    df.drop('Estimated owners', 'Full audio languages', 'Metacritic url', 'User score', 'Score rank', 'Notes', 'Average playtime forever','Screenshots', 'Movies', 'Tags','Support url', 'Header image')
-    .dropDuplicates(['Name'])
-    .dropna(subset=['Name'])   
-
+    # ADCIONANDO A COLUNA Multiplataforma
+    df.withColumn('Multiplataforma', when((df['Linux'] == 'True') & 
+    (df['Windows'] == 'True') & (df['Mac'] == 'True'), 'Sim')
+    .otherwise('Não'))
+    #Removendo colunas  
+        .drop('Estimated owners', 'Full audio languages', 'Metacritic url', 'User score', 'Score rank', 'Notes', 'Average playtime forever', 'Screenshots', 'Movies', 'Tags', 'Support url', 'Header image')
+        .dropDuplicates(['Name'])
+        .dropna(subset=['Name'])
+        .dropna(subset=['Reviews'])
+    #Mudando tipo dos Dados 
+        .withColumn("Peak CCU", F.col("Peak CCU").cast(IntegerType()))
+        .withColumn("Windows", F.col("Windows").cast(BooleanType()))
+        .withColumn("Mac", F.col("Mac").cast(BooleanType()))
+        .withColumn("Linux", F.col("Linux").cast(BooleanType()))
 )
+# Convertendo a coluna 'Release date' para o formato correto
+if 'Release date' in game_df.columns:
+    game_df = game_df.withColumn('Release date', to_date(game_df['Release date'], 'MMM d, yyyy'))
+    game_df = game_df.withColumn('Release date', date_format(game_df['Release date'], 'dd/MM/yyyy'))
+else:
+    print("A coluna 'Release date' não existe no DataFrame.")
 
+# COMMAND ----------
+
+game_df.display(3)
+
+# COMMAND ----------
+
+game_df.dtypes
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC FILTRANDO VALORES E PARA EXTRAIR INFORMAÇOES RELEVANTES!
+# MAGIC
 
 # COMMAND ----------
 
@@ -64,9 +90,9 @@ game_df.display()
 
 # COMMAND ----------
 
+# FILTRANDO JOGOS POR MAIORES PICOS DE JOGADORES DE JOGOS QUE CUSTAM MAIS DE 50$ 
 games_caro = (
     game_df
-    .withColumn("Peak CCU", F.col("Peak CCU").cast(IntegerType()))
     .filter((F.col('Peak CCU') > 1000) & 
             (F.col('Price') >= 50.00))
 )
@@ -131,16 +157,6 @@ idioma_game.display()
 total_reviews = game_df.select(F.col('Reviews')).count()
 print("Total de reviews:", total_reviews)
 
-
-# COMMAND ----------
-
-#dropando jogos com Reviews em branco
-game_reviews = (
-    game_df
-    .dropna(subset=['Reviews'])
-)
-#game_reviews.count()
-game_reviews.display()
 
 # COMMAND ----------
 
